@@ -1,0 +1,47 @@
+<!-- modal header part -->
+<div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">
+        <h1 class="m-0">{{ source }}</h1>
+        <div class="text-black-50 m-0">
+            {{localTimeString}}
+        </div>
+    </div>
+    <button type="button" class="close p-0 border-0 m-1" aria-label="Close"
+        (click)="newsModalService.dismiss('Cross click')">
+        <span class="m-0 border-0" aria-hidden="true">&times;</span>
+    </button>
+</div>
+<!-- modal body part -->
+<div class="modal-body">
+    <h2>{{ headline }}</h2>
+    <p>{{ summary }}</p>
+    <p class="text-black-50">
+        For more details click
+        <a class="text-primary" (click)="goToLink(url)">here</a>
+    </p>
+    <div class="card m-2 mx-auto">
+        <div class="card-body">
+            <div class="row mx-1">Share</div>
+            <div class="row p-0 mx-1" style="height:20px">
+                <!-- twitter share button -->
+                <div class="col-1 m-0 p-0">
+                    <a class="m-0 p-0 d-inline-flex twitter-share-button btn btn-social btn-twitter" href="https://twitter.com/intent/tweet?text={{ headline }}&url={{
+                        url
+                      }}" target="_blank" data-size="large" width="100%">
+                                <i class="fa-brands fa-twitter fa-xl " style="color: Dodgerblue"></i>
+                            </a>
+                </div>
+                <div class="col-1 m-0 p-0">
+                    <a target="_blank" href="{{ fbSrc }}" class="fb-xfbml-parse-ignore "><i
+                        class="fa-brands fa-facebook-square  fa-2xl m-0 p-0 d-inline-flex"></i></a>
+                </div>
+                
+                <!-- facebook share button -->
+
+                
+
+
+            </div>
+        </div>
+    </div>
+</div>

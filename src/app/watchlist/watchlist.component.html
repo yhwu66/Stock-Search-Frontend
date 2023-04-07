@@ -1,0 +1,53 @@
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8">
+        
+        <div class="container my-5 p-0">
+            <h1>{{title}}</h1>
+            
+        </div>
+        
+        <div *ngIf="isWatchListEmpty" class="container my-5 p-0">
+            <ngb-alert [dismissible]="false">
+                <strong>Warning!</strong> You currentlly dont have watchlist
+            </ngb-alert>
+        </div>
+        <div *ngIf="!isWatchListEmpty" class="container my-0 p-0">
+            <ngb-alert class="border" type="light" *ngFor="let item of arrWatchList" (closed)="removeFromWatchList(item)">
+                <div class="container">
+                    <div class="row m-0 p-0" (click)="goSearch(item.ticker)" style="cursor:pointer">
+                        <div class="col m-0 p-0 mat-h2">
+        
+                            {{item.ticker}}
+        
+                        </div>
+                        <div class="col m-0 p-0 text-end mat-h2" [class.text-danger]="item.change < 0"
+                            [class.text-success]="item.change > 0">
+                            {{item.latestprice}}
+                        </div>
+                    </div>
+                    <div class="row m-0 p-0 justify-content-center">
+                        <div class="col m-0 p-0">
+                            {{item.name}}
+                        </div>
+                        <div class="col m-0 p-0 text-end " [class.text-danger]="item.change < 0"
+                            [class.text-success]="item.change > 0">
+                            <svg *ngIf="item.change < 0" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 18">
+                                <path
+                                    d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                            </svg>
+                            <svg *ngIf="item.change > 0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-caret-up-fill" viewBox="0 0 16 18">
+                                <path
+                                    d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                            </svg>
+                            {{item.change}}({{item.changeper}}%)
+                        </div>
+        
+                    </div>
+                </div>
+            </ngb-alert>
+        
+        </div>
+    </div>
+</div>

@@ -1,0 +1,361 @@
+<app-search-form class="m-0"></app-search-form>
+<mat-spinner *ngIf="
+    ( !isstockdata || 
+      !islatestpricedata || 
+      !isnewsdata || 
+      !ishisdata ||
+      !ishourdata || 
+      !isrecommtrenddata ||
+      !issocialsentimentdata ||
+      !iscompanyearningdata ||
+      !iscompanypeerdata)  
+  " class="mt-4 mx-auto">
+</mat-spinner>
+
+<div *ngIf="
+isstockdata  && 
+islatestpricedata && 
+isnewsdata && 
+ishisdata &&
+ishourdata &&
+isrecommtrenddata &&
+issocialsentimentdata &&
+iscompanyearningdata &&
+iscompanypeerdata
+" class="my-4">
+    <div class="container m-0 p-0 ">
+        <div class="row m-0 p-0 justify-content-center">
+            <div class="col-12 col-md-9 m-0 p-0">
+                <ngb-alert *ngIf="buyMessage" type="success" class="text-center" (closed)="buyMessage = ''">
+                    {{ticker}} bought successfully!
+                </ngb-alert>
+                <ngb-alert *ngIf="sellMessage" type="danger" class="text-center" (closed)="sellMessage = ''">
+                    {{ticker}} sold successfully!
+                </ngb-alert>
+                <ngb-alert *ngIf="addMessage" type="success" class="text-center" (closed)="addMessage = ''">
+                    {{ticker}} added to Watchlist.
+                </ngb-alert>
+                <ngb-alert *ngIf="removeMessage" type="danger" class="text-center" (closed)="removeMessage = ''">
+                    {{ticker}} removed from Watchlist.
+                </ngb-alert>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-5 col-md-4">
+                <div class="container m-0 p-0">
+                    <div class="row m-0 p-0">
+                        <div class="col m-0 p-0">
+                            <h1 class="m-0 p-0 mat-h1">
+
+                                {{stockdata.ticker}}
+                                <div class="m-0 p-0 d-inline-flex" (click)="changeWatchList()" style="cursor:pointer">
+                                    <svg *ngIf="!ifInWatchList" xmlns="http://www.w3.org/2000/svg" width="31"
+                                        height="31" fill="currentColor" class="bi bi-star" viewBox="0 0 25 9">
+                                        <path
+                                            d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
+                                    </svg>
+                                    <svg *ngIf="ifInWatchList" xmlns="http://www.w3.org/2000/svg" width="31" height="31"
+                                        fill="#FED100" class="bi bi-star-fill" viewBox="0 0 25 9">
+                                        <path
+                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                                    </svg>
+                                </div>
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="row m-0 p-0 mat-h3 text-muted">
+
+                        {{stockdata.name}}
+
+                    </div>
+                    <div class="row m-0 p-0 mat-h4">
+
+                        {{stockdata.exchange}}
+
+                    </div>
+                    <div class="row m-0 p-0">
+                        <div class="col m-0 p-0">
+                            <button class="btn btn-primary my-0 p-1 px-2 bg-success border-0" id="buy-button"
+                                (click)="launchTransactionModal('Buy')">
+                                Buy
+                            </button>
+                            <button *ngIf="ifInPortfolio" class="btn btn-primary my-0 p-1 px-2 mx-2 bg-danger border-0"
+                                id="sell-button" (click)="launchTransactionModal('Sell')">
+                                Sell
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-2 col-md-1">
+                <img *ngIf="stockdata" src="{{stockdata.logo}}" class="img-responsive" alt="..." width="100%"
+                    height="auto" max-width="20" />
+            </div>
+            <div class="col-5 col-md-4">
+                <div *ngIf="isUp" class="container my-1 p-0 text-end">
+                    <div class="row m-0 p-0">
+                        <div class="col m-0 p-0">
+                            <h1 class="m-0 p-0 headline text-success">
+                                {{latestpricedata.c}}
+                            </h1>
+
+                        </div>
+                    </div>
+                    <div class="row m-0 p-0 text-success">
+                        <div class="col m-0 p-0 mat-h3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-caret-up-fill" viewBox="0 0 16 18">
+                                <path
+                                    d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                            </svg>
+                            {{latestpricedata.d}}({{latestpricedata.dp}}%)
+                        </div>
+                    </div>
+                    <div class="row m-0 p-0">
+                        <div class="col m-0 p-0 text-muted">
+                            {{localTimeString}}
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!isUp" class="container m-0 p-0 text-end">
+                    <div class="row m-0 p-0">
+                        <div class="col m-0 p-0">
+                            <h1 class="m-0 p-0 headline text-danger">
+                                {{latestpricedata.c}}
+                            </h1>
+
+                        </div>
+                    </div>
+                    <div class="row m-0 p-0 text-danger">
+                        <div class="col m-0 p-0 mat-h3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-caret-down-fill" viewBox="0 0 16 18">
+                                <path
+                                    d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                            </svg>
+                            {{latestpricedata.d}}({{latestpricedata.dp}}%)
+                        </div>
+                    </div>
+                    <div class="row m-0 p-0">
+                        <div class="col m-0 p-0 text-muted">
+                            {{localTimeString}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col text-center text-success" *ngIf="isOpen">
+                Market is Open
+            </div>
+            <div class="col text-center text-danger" *ngIf="!isOpen">
+                Market is Closed
+            </div>
+        </div>
+    </div>
+    <div class="container m-0 p-0 ">
+        <div class="row m-0 p-0 justify-content-center">
+            <div class="col-12 col-md-9 m-0 p-0">
+                <mat-tab-group mat-stretch-tabs>
+                    <mat-tab label="Summary">
+                        <ng-template matTabContent>
+                            <div class="container m-0 p-0">
+                                <div class="row m-0 p-0">
+                                    <div class="col-12 col-md-6 m-0 p-0">
+                                        <div class="container m-0 my-3 p-0">
+                                            <div class="row m-0 p-0 h-75">
+                                                <div class="col-12 col-md-6 m-0 p-0 text-center">
+                                                    <p class="m-0"><strong>High Price:&#160; </strong>{{
+                                                        latestpricedata.h
+                                                        }}</p>
+                                                    <p class="m-0"><strong>Low Price:&#160;&#160;</strong> {{
+                                                        latestpricedata.l }}</p>
+                                                    <p class="m-0"><strong>Open Price: </strong>{{ latestpricedata.o }}
+                                                    </p>
+                                                    <p class="m-0"><strong>Prev. Close: </strong>{{ latestpricedata.pc
+                                                        }}
+                                                    </p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row m-0 mt-5 p-0 h-20">
+                                                <div class="col-12 m-0 p-0 text-center">
+                                                    <u class="m-0 mat-h2">About the Company</u>
+                                                </div>
+                                            </div>
+                                            <div class="row m-0 p-0">
+                                                <div class="col-12 m-0 p-0">
+                                                    <p class="m-0"><strong>IPO Start Date: </strong>{{ stockdata.ipo}}
+                                                    </p>
+                                                    <p class="m-0"><strong>Industry: </strong>
+                                                        {{stockdata.finnhubIndustry
+                                                        }}</p>
+                                                    <p class="m-0"><strong>Webpage: </strong><a
+                                                            href="{{stockdata.weburl}}"
+                                                            target="_blank">{{stockdata.weburl }}</a></p>
+                                                    <p class="m-0"><strong>Companypeers: </strong></p>
+                                                    <p>
+                                                        <i *ngFor="let peerCom of companypeerdata"
+                                                            [routerLink]="['/search', peerCom]"
+                                                            style="color:#3366BB ;cursor:pointer;font-style: normal; ">{{peerCom}},
+                                                        </i>
+                                                    </p>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6  m-auto">
+                                        <div class="container m-0 p-0">
+
+                                            <highcharts-chart [Highcharts]="highcharts" [constructorType]="'stockChart'"
+                                                [options]="dailyChartOptions" class="col-sm"
+                                                style="width: 100%; height: 300px; display: block" class="m-0">
+                                            </highcharts-chart>
+
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+
+                    </mat-tab>
+                    <mat-tab label="Top News">
+                        <div class="container">
+                            <div class="row p-1" *ngIf="isnewsdata">
+                                <div class="card col-sm-5 m-2 bg-light mx-auto p-0"
+                                    style="min-width: 48%; max-height: 280px" *ngFor="let item of newsdata | slice:0:20"
+                                    (click)="launchNewsModal(item.source,
+                                    item.category,
+                                    item.image,
+                                    item.datetime,
+                                    item.url,
+                                    item.headline,
+                                    item.summary,
+                                    item.related)">
+                                    <div class="card-body row" style="cursor: pointer;">
+                                        <div class="col-md-2 m-0 p-0 my-auto">
+
+                                            <img *ngIf="newsdata" src="{{item.image}}" class="img-responsive"
+                                                width="100%" max-width="20" max-height="80" alt="Empty Image" />
+                                        </div>
+                                        <div class="col align-items-center my-auto">
+                                            <h3 class="card-title text-black-100 align-items-center my-auto">
+                                                {{item.headline}}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Charts">
+
+                        <ng-template matTabContent>
+                            <highcharts-chart class="col-sm" [Highcharts]="highcharts" [constructorType]="'stockChart'"
+                                [options]="histChartOptions" style="width: 100%; height: 420px;display:block">
+                            </highcharts-chart>
+                        </ng-template>
+
+
+                    </mat-tab>
+                    <mat-tab label="Insights">
+                        <ng-template matTabContent>
+                            <div class="container">
+                                <div class="row justify-content-md-center my-3 text-center m-0">
+                                    <div class="col-12 col-md-6 mat-h2">
+                                        Social Sentiments
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-center my-0">
+                                    <div class="col-12 col-md-6">
+                                        <div class="container text-center">
+                                            <div class="row" style="height:30px">
+                                                <div
+                                                    class="col-6 bg-light border-top border-bottom align-middle p-0 py-auto">
+                                                    <strong>{{stockdata.name}}</strong>
+                                                </div>
+                                                <div
+                                                    class="col-3 bg-light border-top border-bottom align-middle p-0 py-auto">
+                                                    <strong>Reddit</strong>
+                                                </div>
+                                                <div
+                                                    class="col-3 bg-light border-top border-bottom align-middle p-0 py-auto">
+                                                    <strong>Twitter</strong>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="height:30px">
+                                                <div
+                                                    class="col-6 bg-light border-top border-bottom align-middle p-0 py-auto">
+                                                    <strong>Total Mentions</strong>
+                                                </div>
+                                                <div class="col-3 border-top border-bottom align-middle p-0 py-auto">
+                                                    {{mentions[0][0]}}</div>
+                                                <div class="col-3 border-top border-bottom align-middle p-0 py-auto">
+                                                    {{mentions[1][0]}}</div>
+                                            </div>
+                                            <div class="row" style="height:30px">
+                                                <div
+                                                    class="col-6 bg-light border-top border-bottom align-middle p-0 py-auto">
+                                                    <strong>Positive Mentions</strong>
+                                                </div>
+                                                <div class="col-3 border-top border-bottom align-middle p-0 py-auto">
+                                                    {{mentions[0][1]}}</div>
+                                                <div class="col-3 border-top border-bottom align-middle p-0 py-auto">
+                                                    {{mentions[1][1]}}</div>
+                                            </div>
+                                            <div class="row" style="height:30px">
+                                                <div
+                                                    class="col-6 bg-light border-top border-bottom align-middle p-0 py-auto">
+                                                    <strong>Negative Mentions</strong>
+                                                </div>
+                                                <div class="col-3 border-top border-bottom align-middle p-0 py-auto">
+                                                    {{mentions[0][2]}}</div>
+                                                <div class="col-3 border-top border-bottom align-middle p-0 py-auto">
+                                                    {{mentions[1][2]}}</div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row justify-content-md-center my-3 text-center m-0">
+
+                                    <div class="col-12 col-md-6 mat-h2">
+                                        <highcharts-chart [Highcharts]="highcharts"
+                                            [options]="stackedcolumnChartOptions"
+                                            style="width: 100%; height: 300px;display:block">
+                                        </highcharts-chart>
+
+                                    </div>
+                                    <div class="col-12 col-md-6 mat-h2">
+                                        <highcharts-chart [Highcharts]="highcharts" [options]="splineChartOptions"
+                                            style="width: 100%; height: 300px;display:block">
+                                        </highcharts-chart>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+
+
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+
+        </div>
+    </div>

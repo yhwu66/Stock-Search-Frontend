@@ -1,0 +1,49 @@
+<h1 id="searchtitle">Stcok Search</h1>
+<div class="container m-0 p-0">
+    <div class="row justify-content-center m-0 p-0">
+        <div class="col-12 col-md-4 m-0 p-0">
+            <form class="example-form">
+                <div class="searchbar">
+
+                    <div class="container m-0 p-0">
+                        <div class="row justify-content-center m-0 pt-1">
+                            <div class="col-10  m-0 p-0">
+                                <input #box type="text" placeholder="Enter stock ticker symbol" matInput
+                                    [formControl]="myControl" [matAutocomplete]="auto" id="inputtext">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngIf="isLoading" class="is-loading">
+                                        <mat-spinner diameter="25"></mat-spinner>
+                                    </mat-option>
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.ticker">
+                                        <span>{{option.ticker}}</span> |
+                                        <small class="mat-small">{{option.name}}</small>
+                                    </mat-option>
+                                </mat-autocomplete>
+
+                            </div>
+                            <div class="col-1  m-0 p-0">
+                                <i class="material-icons" style="cursor:pointer"
+                                    (click)="startSearch(box.value)">search</i>
+
+                            </div>
+                            <div class="col-1  m-0 p-0">
+                                <i class="material-icons" style="cursor:pointer" (click)="clearSearch()">close</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container m-0 p-0">
+    <div class="row justify-content-center m-0 p-0">
+        <ngb-alert *ngIf="ifEmpty" type="danger" class="text-center my-5 col-9" (closed)="ifEmpty=false">
+            Please enter a valid ticker
+        </ngb-alert>
+        <ngb-alert *ngIf="!ifExist" type="danger" class="text-center my-5 col-9" (closed)="ifExist=true">
+            No data found. Please enter a valid ticker
+        </ngb-alert>
+    </div>
+
+</div>

@@ -1,0 +1,18 @@
+.navbar-custom{
+    background-color: #2224AB;
+}
+.nav-item{
+    color: white;
+}
+.navbar-toggler{
+    color: white;
+}
+.navbar-nav{
+    margin-left: auto;
+    margin-right: 0%;
+}
+.active {
+    border-color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+}

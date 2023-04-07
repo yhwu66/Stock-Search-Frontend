@@ -1,0 +1,119 @@
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8">
+        <ngb-alert *ngIf="buyMessage" type="success" class="text-center" (closed)="buyMessage = ''">
+            {{transTicker}} bought successfully!
+        </ngb-alert>
+        <ngb-alert *ngIf="sellMessage" type="danger" class="text-center" (closed)="sellMessage = ''">
+            {{transTicker}} sold successfully!
+        </ngb-alert>
+        <div class="container my-5 p-0">
+            <h1>My Portfolio</h1>
+            <h2>Money in Wallet: ${{moneyLeft}}</h2>
+        </div>
+
+        <div *ngIf="isPortfolioEmpty" class="container my-5 p-0">
+            <ngb-alert [dismissible]="false">
+                <strong>Warning!</strong> You currentlly dont have Portfolio
+            </ngb-alert>
+        </div>
+        <div *ngIf="!isPortfolioEmpty" class="container my-0 p-0">
+
+            <div class="card m-0 my-4" *ngFor="let item of arrPortfolio">
+                <div class="card-header py-auto">
+                    <p class="m-0 p-0 mat-h2">{{item.ticker}} <small class="mat-h3">{{item.name}}</small></p>
+                </div>
+                <div class="card-body m-0 p-0">
+                    
+                    <div class="container m-0 p-0">
+                        <div class="row m-0 p-0 py-1">
+                            <div class="col-12 col-md-6 m-0 p-0 px-3">
+                                <div class="container m-0 p-0">
+                                    <div class="row m-0 p-0">
+                                        <div class="col-6 m-0 p-0">
+                                            Quantity:
+                                        </div>
+                                        <div class="col-6 m-0 p-0 text-end">
+                                            {{item.quantity}}
+                                        </div>
+                                    </div>
+                                    <div class="row m-0 p-0">
+                                        <div class="col-6 m-0 p-0">
+                                            Avg. Cost/Share:
+                                        </div>
+                                        <div class="col-6 m-0 p-0 text-end">
+                                            {{item.avg}}
+                                        </div>
+                                    </div>
+                                    <div class="row m-0 p-0">
+                                        <div class="col m-0 p-0">
+                                            Total Cost:
+                                        </div>
+                                        <div class="col m-0 p-0 text-end">
+                                            {{item.totalcost}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-md-6 m-0 p-0 px-3">
+                                <div class="container m-0 p-0">
+                                    <div class="row m-0 p-0">
+                                        <div class="col-6 m-0 p-0">
+                                            Change:
+                                        </div>
+                                        <div class="col-6 m-0 p-0 text-end" [class.text-danger]="item.change < 0"
+                                            [class.text-success]="item.change > 0">
+                                            <svg *ngIf="item.change < 0" xmlns="http://www.w3.org/2000/svg" width="20"
+                                                height="20" fill="currentColor" class="bi bi-caret-down-fill"
+                                                viewBox="0 0 16 18">
+                                                <path
+                                                    d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                                            </svg>
+                                            <svg *ngIf="item.change > 0" xmlns="http://www.w3.org/2000/svg" width="20"
+                                                height="20" fill="currentColor" class="bi bi-caret-up-fill"
+                                                viewBox="0 0 16 18">
+                                                <path
+                                                    d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                                            </svg>
+
+                                            {{item.change}}
+                                        </div>
+                                    </div>
+                                    <div class="row m-0 p-0">
+                                        <div class="col m-0 p-0">
+                                            Current Price:
+                                        </div>
+                                        <div class="col m-0 p-0 text-end" [class.text-danger]="item.change < 0"
+                                            [class.text-success]="item.change > 0">
+                                            {{item.currentprice}}
+                                        </div>
+                                    </div>
+                                    <div class="row m-0 p-0">
+                                        <div class="col m-0 p-0">
+                                            Market Value:
+                                        </div>
+                                        <div class="col m-0 p-0 text-end" [class.text-danger]="item.change < 0"
+                                            [class.text-success]="item.change > 0">
+                                            {{item.mktvalue}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-end py-1">
+                    <button class="btn btn-primary m-1 p-1 px-2 bg-primary border-0" id="buy-button"
+                        (click)="launchTransactionModal(item.ticker, item.name, item.currentprice,'Buy')">
+                        Buy
+                    </button>
+                    <button class="btn btn-primary m-1 p-1 px-2 bg-danger border-0" id="sell-button"
+                        (click)="launchTransactionModal(item.ticker, item.name, item.currentprice,'Sell')">
+                        Sell
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
